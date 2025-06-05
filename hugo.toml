@@ -1,6 +1,6 @@
 baseURL = 'https://example.org/'
 languageCode = 'ja-jp'
-title = 'りくと ブログ'
+title = 'りくとのブログ'
 theme = "my-blog-theme"
 # hugo.toml
 ignoreFiles = ["themes/.*/content/.*"]
