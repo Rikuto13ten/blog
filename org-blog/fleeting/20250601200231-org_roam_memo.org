@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       6660ECFB-D41D-4656-AAC9-9359A3F2961E
+:END:
+#+TITLE: org-roam-memo
+* org roam について
+~~/org/blog/~ の中で運用する。
+~org-roam-capture~ で、メモや記事を作成する。
+** ディレクトリ構成
+~fleeting~ は、技術的なメモなどをまとめる。
+~diary~ は、 日記。
+~permanent~ は、記事など。
+~private~ は、技術と関係ない系。

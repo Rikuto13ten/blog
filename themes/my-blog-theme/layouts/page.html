@@ -1,0 +1,9 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+
+  {{ $dateMachine := .Date }}
+  {{ $dateHuman := .Date | time.Format "2006.01.02" }}
+  <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+  {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+  {{ .Content }}
+{{ end }}

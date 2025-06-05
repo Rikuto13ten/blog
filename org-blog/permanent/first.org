@@ -1,0 +1,12 @@
+#+TITLE: ブログサイトを作りました
+#+AUTHOR: Rikuto13ten
+#+DATE: <2025-06-05>
+#+HUGO_BASE_DIR: ../../
+#+HUGO_DRAFT: false
+#+STARTUP: nohideblocks
+
+ブログを作ってみたくて作りました。
+技術的なこと中心に色々投稿しようかなと思います。
+
+おわり。
+

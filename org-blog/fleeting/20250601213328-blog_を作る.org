@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       310CA0F0-B3EB-49D8-A8B2-B5006B7F343D
+:END:
+#+TITLE: blog を作る
+
+* 技術選定
+- org mode のサポートがある
+- ドキュメントが豊富
+- 簡単に作れる
+- github pages でホスティングする
+- git にあげた段階で、投稿するように動いてほしい
+
+** 静的サイトジェネレーター
+*** Hugo
+- https://gohugo.io/
+- org-mode で記事を書けるらしい。
+- 実際に同じことをしている人が多い。
+- ~ox-huho~ という専用パッケージがある
+
+*** one.el
+- https://one.tonyaldon.com/
+- elisp で色々できるらしい.
+- emacs で書きやすい。
+- org-mode で記事を書くためにつくられたみたい
+- ひとつの ~.org~ ファイルに記事を追加していく
+- ~org-roam~ の管理方法だとそれは合わない

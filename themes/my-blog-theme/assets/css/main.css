@@ -1,0 +1,134 @@
+:root {
+    --bg-color: #232946;
+    --paragraph: #b8c1ec;
+    --stroke: #121629;
+    --headline: #fffffe;
+    --button: #eebbc3;
+}
+
+h1,h2,h3 {
+    color: var(--headline);
+}
+
+body {
+  color: var(--paragraph);
+  background-color: var(--bg-color);
+  font-family: sans-serif;
+  line-height: 1.5;
+  margin: auto;
+  padding: 1rem;
+  max-width: 768px;
+}
+
+header {
+  border-bottom: 1px solid var(--paragraph);
+  margin-bottom: 1rem;
+}
+
+footer {
+  border-top: 1px solid var(--paragraph);
+  margin-top: 1rem;
+}
+
+a {
+  color: var(--paragraph);
+  text-decoration: none;
+}
+
+nav > ul {
+    display: flex;
+    padding: 0;
+    li {
+        margin-right: 1rem;
+        list-style: none;
+    }
+}
+
+.content-container {
+    border-left: solid 2px var(--button);
+    padding-left: 8px;
+    margin-bottom: 16px;
+
+    h2 {
+        font-size: 1rem;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap:8px;
+    padding: 0;
+
+    li {
+        list-style: none;
+    }
+
+    .tag {
+        font-size: 1rem;
+        border: solid 1px var(--paragraph);
+        border-radius: 4px;
+        padding: 4px;
+        font-family: monospace, "fira code", Consolas, Monaco, "andale mono";
+    }
+}
+
+p > code {
+    font-size: 0.8rem;
+    color: var(--paragraph);
+    background-color: var(--stroke);
+    border-radius: 4px;
+    padding: 4px 4px;
+}
+
+.codeblock--container {
+
+    font-family: monospace, "fira code", Consolas, Monaco, "andale mono";
+    margin: 16px 0;
+
+    .codeblock--name {
+        transform: translate(0, 8px);
+        background-color: var(--paragraph);
+        color: var(--bg-color);
+        padding: 0 0 0 8px;
+        border-radius: 8px 8px 0 0;
+    }
+    .codeblock--content {
+            background-color: #232136;
+        padding: 16px;
+        border: solid 1px var(--paragraph);
+        border-radius: 8px;
+    }
+}
+
+blockquote {
+    color: var(--paragraph);
+    opacity: 0.6;
+    border-left: solid 2px var(--paragraph);
+    margin: 0;
+    padding: 8px;
+    p {
+        padding: 0;
+        margin: 0;
+    }
+}
+
+table {
+    border-collapse: collapse;
+    border-radius: 8px;
+    td, th {
+        border: solid 1px var(--paragraph);
+        padding: 8px;
+    }
+}
+
+p > a {
+    color: var(--button);
+}
+
+time {
+    font-size: 0.8rem;
+}

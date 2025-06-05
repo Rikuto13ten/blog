@@ -1,0 +1,20 @@
+baseURL = 'https://example.org/'
+languageCode = 'ja-jp'
+title = 'りくと ブログ'
+theme = "my-blog-theme"
+# hugo.toml
+ignoreFiles = ["themes/.*/content/.*"]
+[markup]
+  [markup.goldmark]
+  [markup.goldmark.renderer]
+    hardWraps = true
+    unsafe = false
+    [markup.goldmark.parser]
+      [markup.goldmark.parser.attribute]
+        block = true
+        title = true
+  [markup.highlight]
+    noClasses = false
+    codeFences = true
+    lineNos = true
+    style = 'rose-pine-moon'

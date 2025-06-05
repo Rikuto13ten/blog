@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       F5CB6F58-F050-4870-B38C-D2A3D18728DC
+:END:
+#+TITLE: Listing directory failed but ‘access-file’ worked 対処方
+~gls~ がないことが原因
+
+対処法は、
+~coreutils~ をインストールする。
+#+begin_src shell
+  brew install coreutils
+#+end_src
+または、 nix でインストール
+
+その後
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq insert-directory-program "/opt/homebrew/bin/gls"))
+#+end_src
