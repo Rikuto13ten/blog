@@ -18,3 +18,7 @@ ignoreFiles = ["themes/.*/content/.*"]
     codeFences = true
     lineNos = true
     style = 'rose-pine-moon'
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
