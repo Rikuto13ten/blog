@@ -2,6 +2,7 @@ baseURL = 'https://rikuto13ten.github.io'
 languageCode = 'ja-jp'
 title = 'りくと-備忘録'
 theme = "my-blog-theme"
+copyright = 'Rikuto13ten'
 # hugo.toml
 ignoreFiles = ["themes/.*/content/.*"]
 [markup]
