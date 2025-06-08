@@ -2,17 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://example.org/</loc>
+    <loc>http://100.64.150.42:1313/</loc>
+    <lastmod>2025-06-08T00:00:00+09:00</lastmod>
+  </url><url>
+    <loc>http://100.64.150.42:1313/tags/hugo/</loc>
+    <lastmod>2025-06-08T00:00:00+09:00</lastmod>
+  </url><url>
+    <loc>http://100.64.150.42:1313/posts/20250605110720-hugo_ox_hugo_githubpages_%E3%81%A7_org_mode/</loc>
+    <lastmod>2025-06-08T00:00:00+09:00</lastmod>
+  </url><url>
+    <loc>http://100.64.150.42:1313/tags/org-mode/</loc>
+    <lastmod>2025-06-08T00:00:00+09:00</lastmod>
+  </url><url>
+    <loc>http://100.64.150.42:1313/tags/ox-hugo/</loc>
+    <lastmod>2025-06-08T00:00:00+09:00</lastmod>
+  </url><url>
+    <loc>http://100.64.150.42:1313/posts/</loc>
+    <lastmod>2025-06-08T00:00:00+09:00</lastmod>
+  </url><url>
+    <loc>http://100.64.150.42:1313/tags/</loc>
+    <lastmod>2025-06-08T00:00:00+09:00</lastmod>
+  </url><url>
+    <loc>http://100.64.150.42:1313/posts/first/</loc>
     <lastmod>2025-06-05T00:00:00+09:00</lastmod>
   </url><url>
-    <loc>https://example.org/posts/</loc>
-    <lastmod>2025-06-05T00:00:00+09:00</lastmod>
-  </url><url>
-    <loc>https://example.org/posts/first/</loc>
-    <lastmod>2025-06-05T00:00:00+09:00</lastmod>
-  </url><url>
-    <loc>https://example.org/categories/</loc>
-  </url><url>
-    <loc>https://example.org/tags/</loc>
+    <loc>http://100.64.150.42:1313/categories/</loc>
   </url>
 </urlset>

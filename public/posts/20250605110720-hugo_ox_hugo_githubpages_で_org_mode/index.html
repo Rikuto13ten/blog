@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja-jp" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="http://100.64.150.42:1313/css/syntax.css" />
+<title>Hugo &amp; ox-hugo &amp; github-pages で、org-mode で投稿するブログを作る | りくと-備忘録</title>
+
+    <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+  <header>
+    <h1>りくと-備忘録</h1>
+
+  <nav>
+    <ul>
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li>
+      <a aria-current="true" class="ancestor" href="/posts/">Posts</a>
+    </li>
+    <li>
+      <a href="/tags/">Tags</a>
+    </li>
+    </ul>
+  </nav>
+
+
+  </header>
+  <main>
+    
+  <h1>Hugo &amp; ox-hugo &amp; github-pages で、org-mode で投稿するブログを作る</h1>
+
+  
+  
+  <time datetime="2025-06-08 00:00:00 &#43;0900 JST">2025.06.08</time>
+  
+  <div>
+    <ul class="tag-container">
+              <li><a href="/tags/hugo/" class="tag">Hugo</a></li>
+              <li><a href="/tags/org-mode/" class="tag">org-mode</a></li>
+              <li><a href="/tags/ox-hugo/" class="tag">ox-hugo</a></li>
+    </ul>
+  </div>
+
+  <p>このブログサイトを作るにあたってやったことを備忘録的に書いていきます。 <!-- raw HTML omitted --></p>
+<h2 id="技術選定">技術選定</h2>
+<p>要件は以下 <!-- raw HTML omitted --></p>
+<ul>
+<li>org-mode で書いたものを <code>.md</code> なりに変換してくれる <!-- raw HTML omitted --></li>
+<li>ある程度カスタマイズができる(見ため等) <!-- raw HTML omitted --></li>
+</ul>
+<h3 id="静的サイトジェネレーター">静的サイトジェネレーター</h3>
+<p>候補にあがったのは、 <strong>one.el</strong> と <strong>Hugo</strong> です。 <!-- raw HTML omitted --><br>
+結論から言うと、 <strong>Hugo</strong> にしました。 <!-- raw HTML omitted --></p>
+<h4 id="one-dot-el">one.el</h4>
+<p>URL : <a href="https://one.tonyaldon.com/">https://one.tonyaldon.com/</a> <!-- raw HTML omitted --><br>
+公式の説明(翻訳)によると、 <!-- raw HTML omitted --></p>
+<blockquote>
+<ul>
+<li>固有のorgファイルに含まれる、 <!-- raw HTML omitted --></li>
+<li>たった1つのEmacsコマンドでレンダリングされ、 <!-- raw HTML omitted --></li>
+<li>Emacs Lispコード（CSSも）を書いて変更できるもの <!-- raw HTML omitted --></li>
+<li>プレーンなEmacs Lispデータである「HTMLテンプレート」を使用して、 <!-- raw HTML omitted --></li>
+<li>設定ファイルなしで、 <!-- raw HTML omitted --></li>
+<li>外部の静的サイトジェネレータに依存しないのですか? <!-- raw HTML omitted --></li>
+</ul>
+<p>one.el. <a href="https://one.tonyaldon.com/">https://one.tonyaldon.com/</a> (参照 2025-06-07) <!-- raw HTML omitted --></p></blockquote>
+<p>とのこと。 <!-- raw HTML omitted --></p>
+<p>なかなか魅力的ですね。 <!-- raw HTML omitted --><br>
+org-mode -&gt; HTML に直接変換するようです。 <!-- raw HTML omitted --><br>
+設定が Emacs-Lisp で書けるのは便利ですね。 <!-- raw HTML omitted --></p>
+<p>しかし、単一の org ファイルに書くようです。 <!-- raw HTML omitted --><br>
+私は、現在は org-roam で 1ファイルごとに記事を書いていく方針なのでそこだけ合わなかったです。 <!-- raw HTML omitted --></p>
+<p>いつかどこかで試してみたいと思います。 <!-- raw HTML omitted --></p>
+<h4 id="hugo">Hugo</h4>
+<p>URL : <a href="https://gohugo.io/">https://gohugo.io/</a> <!-- raw HTML omitted --><br>
+Hugo は、 Go で書かれた静的サイトジェネレーターです。 <!-- raw HTML omitted --></p>
+<p>実際に、 Hugo を使って org-mode で記事を書いている方も大勢おり、 <!-- raw HTML omitted --><br>
+<strong>ox-hugo</strong> という org-mode を hugo の形式に合わせた markdown に変換してくれる Emacs のパッケージもあるくらいです。 <!-- raw HTML omitted --><br>
+theme も自分でカスタマイズできるということもあり、こちらを使うことに決めました。 <!-- raw HTML omitted --></p>
+<h2 id="環境構築">環境構築</h2>
+<p>環境構築は、 nix-flake で行ないました。 <!-- raw HTML omitted --><br>
+以下のように、書いて <code>nix develop</code> するだけです。 <!-- raw HTML omitted --><br>
+Nix Flake を導入してから環境構築が本当に楽になりました。 <!-- raw HTML omitted --></p>
+<div class="codeblock--container">
+  <div class="codeblock--content"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-nix" data-lang="nix"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">description</span> <span class="o">=</span> <span class="s2">&#34;Hugo development environment&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">nixpkgs</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;github:NixOS/nixpkgs/nixos-unstable&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">flake-utils</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;github:numtide/flake-utils&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">outputs</span> <span class="o">=</span> <span class="p">{</span> <span class="n">self</span><span class="o">,</span> <span class="n">nixpkgs</span><span class="o">,</span> <span class="n">flake-utils</span> <span class="p">}:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">flake-utils</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">eachDefaultSystem</span> <span class="p">(</span><span class="n">system</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">      <span class="k">let</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pkgs</span> <span class="o">=</span> <span class="n">nixpkgs</span><span class="o">.</span><span class="n">legacyPackages</span><span class="o">.</span><span class="si">${</span><span class="n">system</span><span class="si">}</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">in</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">devShells</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">mkShell</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">buildInputs</span> <span class="o">=</span> <span class="k">with</span> <span class="n">pkgs</span><span class="p">;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="n">hugo</span>
+</span></span><span class="line"><span class="cl">          <span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">          <span class="n">shellHook</span> <span class="o">=</span> <span class="s1">&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">            echo &#34;Hugo development environment loaded!&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s1">            echo &#34;Hugo version: $(hugo version)&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s1">          &#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">};</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+  </div>
+</div><p>環境構築が成功すると、以下のようにディレクトリが作られているかと思います。 <!-- raw HTML omitted --><br>
+. <!-- raw HTML omitted --><br>
+├─ archetypes <!-- raw HTML omitted --><br>
+├─ assets <!-- raw HTML omitted --><br>
+├─ content <!-- raw HTML omitted --><br>
+├─ data <!-- raw HTML omitted --><br>
+├─ i18n <!-- raw HTML omitted --><br>
+├─ layouts <!-- raw HTML omitted --><br>
+├─ public <!-- raw HTML omitted --><br>
+├─ static <!-- raw HTML omitted --><br>
+├─ hugo.toml <!-- raw HTML omitted --><br>
+├─ flake.nix <!-- raw HTML omitted --><br>
+├─ flake.lock <!-- raw HTML omitted --><br>
+└─ README.md <!-- raw HTML omitted --></p>
+<p><strong>ox-hugo</strong> の導入は、 <!-- raw HTML omitted --><br>
+<code>package.el</code> なりに、以下のように書きます。 <!-- raw HTML omitted --></p>
+<div class="codeblock--container">
+  <div class="codeblock--content"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-emacs-lisp" data-lang="emacs-lisp"><span class="line"><span class="cl"><span class="p">(</span><span class="nb">use-package</span> <span class="nv">ox-hugo</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">:ensure</span> <span class="no">t</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">:pin</span> <span class="nv">melpa</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">:after</span> <span class="nv">ox</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">:config</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nb">setq</span> <span class="nv">org-hugo-preserve-filling</span> <span class="no">t</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">(</span><span class="nb">setq</span> <span class="nv">org-export-preserve-breaks</span> <span class="no">t</span><span class="p">))</span></span></span></code></pre></div>
+  </div>
+</div><h2 id="theme-の作成">theme の作成</h2>
+<p>まず始めに、 theme を作るところから行いました。 <!-- raw HTML omitted --><br>
+既存のテーマも良かったのですが、自分の満足いく見ためにしたかったので作ることにしました。 <!-- raw HTML omitted --><br>
+以下のコマンドで、新しいテーマを作成します。 <!-- raw HTML omitted --></p>
+<div class="codeblock--container">
+  <div class="codeblock--content"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">hugo new theme <span class="o">[</span>name<span class="o">]</span></span></span></code></pre></div>
+  </div>
+</div><p>実行が終わると、<del>theme/[name]</del> に以下の構成でできているかと思います。 <!-- raw HTML omitted --><br>
+. <!-- raw HTML omitted --><br>
+├─ archetypes <!-- raw HTML omitted --><br>
+├─ assets <!-- raw HTML omitted --><br>
+├─ content <!-- raw HTML omitted --><br>
+├─ data <!-- raw HTML omitted --><br>
+├─ i18n <!-- raw HTML omitted --><br>
+├─ layouts <!-- raw HTML omitted --><br>
+├─ public <!-- raw HTML omitted --><br>
+├─ static <!-- raw HTML omitted --><br>
+└─ hugo.toml <!-- raw HTML omitted --></p>
+<p>見た目を変更するには、主に <code>assets/css/main.css</code> に css で修飾していきます。 <!-- raw HTML omitted --></p>
+<h3 id="コードブロックのシンタックスハイライトを変える">コードブロックのシンタックスハイライトを変える</h3>
+<p><a href="https://gohugo.io/quick-reference/syntax-highlighting-styles/">https://gohugo.io/quick-reference/syntax-highlighting-styles/</a> からシンタックスハイライトを選びます。 <!-- raw HTML omitted --><br>
+例えば、 <code>rose-pine-moon</code> にするとします。 <!-- raw HTML omitted --><br>
+以下のように、theme 内に <code>rose-pine-moon</code> の css を入れます。 <!-- raw HTML omitted --></p>
+<div class="codeblock--container">
+  <div class="codeblock--content"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">hugo gen chromastyles --style<span class="o">=</span>rose-pine-moon &gt; ./theme/my-theme/static/css/syntax.css</span></span></code></pre></div>
+  </div>
+</div><p>その後、 <code>./theme/my-theme/layouts/_partials/head.html</code> に以下を追記します。 <!-- raw HTML omitted --></p>
+<div class="codeblock--container">
+  <div class="codeblock--content"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nt">link</span> <span class="nt">rel</span><span class="o">=</span><span class="s2">&#34;stylesheet&#34;</span> <span class="nt">href</span><span class="o">=</span><span class="s2">&#34;{{ .Site.BaseURL }}css/syntax.css&#34;</span> <span class="o">/&gt;</span></span></span></code></pre></div>
+  </div>
+</div><h2 id="org-ファイルを-markdown-に変換する">org ファイルを markdown に変換する</h2>
+<p>テーマがカスタマイズできたら、org ファイルをつくって記事にしていきます。 <!-- raw HTML omitted --><br>
+プロジェクトルートに <code>org/</code> などのディレクトリを作成し、そのなかに org ファイルを作成します。 <!-- raw HTML omitted --><br>
+org ファイルの先頭には Hugo 用のオプションを書く必要があります。 <!-- raw HTML omitted --></p>
+<div class="codeblock--container">
+  <div class="codeblock--content"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-org" data-lang="org"><span class="line"><span class="cl"><span class="cs">#+TITLE</span><span class="c">: Hugo &amp; ox-hugo &amp; github-pages で、org-mode で投稿するブログを作る</span>
+</span></span><span class="line"><span class="cl"><span class="cs">#+AUTHOR</span><span class="c">: Rikuto13ten</span>
+</span></span><span class="line"><span class="cl"><span class="cs">#+DATE</span><span class="c">: &lt;2025-06-08&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="cs">#+HUGO_BASE_DIR</span><span class="c">: ../../</span>
+</span></span><span class="line"><span class="cl"><span class="cs">#+HUGO_DRAFT</span><span class="c">: false</span>
+</span></span><span class="line"><span class="cl"><span class="cs">#+HUGO_TAGS</span><span class="c">: Hugo org-mode ox-hugo</span>
+</span></span><span class="line"><span class="cl"><span class="cs">#+STARTUP</span><span class="c">: showall</span></span></span></code></pre></div>
+  </div>
+</div><p><code>#+HUGO_BASE_DIR</code> は、 org ファイルからみて  <code>./content/</code> がどこにあるのかを書くものです。 <!-- raw HTML omitted --><br>
+例えば、私の場合は <code>./org/permanent/</code> の中に記事を書いているので、org ファイルからのパスは <code>../../</code> となります。 <!-- raw HTML omitted --></p>
+<p><code>#+HUGO_TAGS</code> は、単純に記事のタグです。Zenn や、Qiita と同じです。 <!-- raw HTML omitted --></p>
+<p>ファイルを markdonw に出力するには、 <code>C-c C-e H H</code> というキーバインドを打ちます。 <!-- raw HTML omitted --><br>
+↓他のコマンドを割り当てている方用に <!-- raw HTML omitted --></p>
+<p>実行すると、 <code>./content/posts/</code> の中に md ファイルが作成されていると思います。 <!-- raw HTML omitted --></p>
+<h2 id="github-pages-でサイトを公開する">GitHub Pages でサイトを公開する</h2>
+<p>サイトの設定が済んだので、公開したいと思います。 <!-- raw HTML omitted --><br>
+プロジェクトを GitHub に公開リポジトリとして登録します。 <!-- raw HTML omitted --><br>
+ドキュメントに方法がのっているので、参考にします。 <!-- raw HTML omitted --><br>
+特につまずくこともなくできました。 <!-- raw HTML omitted --><br>
+<a href="https://gohugo.io/host-and-deploy/host-on-github-pages/">https://gohugo.io/host-and-deploy/host-on-github-pages/</a> <!-- raw HTML omitted --></p>
+<h2 id="つまったところ">つまったところ</h2>
+<ul>
+<li>
+<p><strong>org-mode の改行が markdown に反映されない</strong> <!-- raw HTML omitted --><br>
+以下のように、設定することで改行が反映されます。 <!-- raw HTML omitted --></p>
+<div class="codeblock--container">
+  <div class="codeblock--content"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-elisp" data-lang="elisp"><span class="line"><span class="cl"><span class="c1">;; エクスポート時にすべての改行が保持される</span>
+</span></span><span class="line"><span class="cl"> <span class="p">(</span><span class="nb">setq</span> <span class="nv">org-export-preserve-breaks</span> <span class="no">t</span><span class="p">)</span></span></span></code></pre></div>
+  </div>
+</div></li>
+<li>
+<p><strong>インラインコード -&gt; <code>これ</code> に css が適用されない</strong> <!-- raw HTML omitted --><br>
+以下のようにすることで適用されます。 <!-- raw HTML omitted --></p>
+<div class="codeblock--container">
+  <div class="codeblock--content"><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="line"><span class="cl"><span class="p">:</span><span class="nd">not</span><span class="o">(</span><span class="nt">pre</span><span class="o">)</span> <span class="o">&gt;</span> <span class="nt">code</span> <span class="p">{}</span></span></span></code></pre></div>
+  </div>
+</div></li>
+</ul>
+
+
+  </main>
+  <footer>
+    <p>Copyright 2025. All rights reserved.</p>
+
+  </footer>
+</body>
+</html>

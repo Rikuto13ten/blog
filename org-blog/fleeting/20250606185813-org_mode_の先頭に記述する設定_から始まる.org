@@ -1,0 +1,60 @@
+:PROPERTIES:
+:ID:       7B4F345B-041D-4547-8A77-72587C090251
+:END:
+#+TITLE: org mode の先頭に記述する設定 ~#+~ から始まる
+
+https://tamura70.hatenadiary.org/entry/20100303/org
+
+| キーワード     | 説明                         | 使用例                            |
+|----------------+------------------------------+-----------------------------------|
+| =#+TITLE:=       | ドキュメントのタイトルを設定 | =#+TITLE: 私の組織ノート=           |
+| =#+AUTHOR:=      | 作者名を設定                 | =#+AUTHOR: 田中太郎=                |
+| =#+EMAIL:=       | 作者のメールアドレス         | =#+EMAIL: tanaka@example.com=       |
+| =#+DATE:=        | ドキュメントの日付           | =#+DATE: 2024-03-15=                |
+| =#+LANGUAGE:=    | ドキュメントの言語設定       | =#+LANGUAGE: ja=                    |
+| =#+DESCRIPTION:= | ドキュメントの説明文         | =#+DESCRIPTION: プロジェクト計画書= |
+| =#+KEYWORDS:=    | キーワード（SEO等で使用）    | =#+KEYWORDS: 組織, 計画, TODO=      |
+** エクスポート設定
+| キーワード             | 説明                             | 使用例                               |
+|------------------------+----------------------------------+--------------------------------------|
+| =#+OPTIONS:=             | エクスポート時のオプション設定   | =#+OPTIONS: toc:t num:t=               |
+| =#+EXPORT_SELECT_TAGS:=  | エクスポートに含めるタグ         | =#+EXPORT_SELECT_TAGS: export=         |
+| =#+EXPORT_EXCLUDE_TAGS:= | エクスポートから除外するタグ     | =#+EXPORT_EXCLUDE_TAGS: noexport=      |
+| =#+TEXT:=                | エクスポート時に挿入するテキスト | =#+TEXT: これは序文です=               |
+| =#+STYLE:=               | HTML/CSSスタイルの設定           | =#+STYLE: <link rel="stylesheet"...>=  |
+| =#+LATEX_HEADER:=        | LaTeXヘッダーに追加する内容      | =#+LATEX_HEADER: \usepackage{amsmath}= |
+| =#+LINK_UP:=             | 上位ページへのリンク             | =#+LINK_UP: ../index.html=             |
+| =#+LINK_HOME:=           | ホームページへのリンク           | =#+LINK_HOME: /=                       |
+** 表・計算設定
+| キーワード   | 説明                       | 使用例                              |
+|--------------+----------------------------+-------------------------------------|
+| =#+CONSTANTS:= | 表計算で使用する定数を定義 | =#+CONSTANTS: pi=3.14 c=299792458=    |
+| =#+TBLFM:=     | テーブルの数式を保存       | =#+TBLFM: $3=$1+$2::$4=vmean($1..$3)= |
+** ドローワ・プロパティ設定
+| キーワード  | 説明                         | 使用例                                    |
+|-------------+------------------------------+-------------------------------------------|
+| =#+DRAWERS:=  | カスタムドローワを定義       | =#+DRAWERS: PROPERTIES CLOCK LOGBOOK MEMO=  |
+| =#+PROPERTY:= | バッファ全体のプロパティ設定 | =#+PROPERTY: Effort_ALL 0:30 1:00 2:00=     |
+| =#+COLUMNS:=  | カラムビューの設定           | =#+COLUMNS: %25ITEM %TODO %3PRIORITY %TAGS= |
+** アーカイブ・TODO設定
+| キーワード    | 説明                            | 使用例                                             |                |
+|---------------+---------------------------------+----------------------------------------------------+----------------|
+| =#+ARCHIVE:=    | アーカイブファイルの場所を指定  | =#+ARCHIVE: %s_done::* Archived Tasks=               |                |
+| =#+TODO:=       | TODO キーワードシーケンスの定義 | =#+TODO: TODO WAIT                                 | DONE CANCELED= |
+| =#+SEQ_TODO:=   | シーケンシャルなTODOキーワード  | =#+SEQ_TODO: TODO NEXT                             | DONE=          |
+| =#+TYP_TODO:=   | タイプ別TODOキーワード          | =#+TYP_TODO: Fred Sara Lucy Mike                   | DONE=          |
+| =#+TAGS:=       | タグの定義                      | =#+TAGS: @work @home @computer { @urgent @someday }= |                |
+| =#+PRIORITIES:= | 優先度の設定                    | =#+PRIORITIES: A C B=                                |                |
+** その他の設定
+| キーワード  | 説明                         | 使用例                                            |
+|-------------+------------------------------+---------------------------------------------------|
+| =#+STARTUP:=  | ファイル開時の初期状態設定   | =#+STARTUP: overview indent=                        |
+| =#+BIND:=     | エクスポート時のLisp変数設定 | =#+BIND: variable-name value=                       |
+| =#+CATEGORY:= | デフォルトカテゴリの設定     | =#+CATEGORY: Work=                                  |
+| =#+FILETAGS:= | ファイル全体のタグ           | =#+FILETAGS: :personal:notes:=                      |
+| =#+LINK:=     | リンクの短縮形を定義         | =#+LINK: google https://www.google.com/search?q=%s= |
+** コードブロック・babel設定
+| キーワード  | 説明                      | 使用例                                     |
+|-------------+---------------------------+--------------------------------------------|
+| =#+BABEL:=    | babel（コード実行）の設定 | =#+BABEL: :cache yes=                        |
+| =#+PROPERTY:= | babelプロパティの設定     | =#+PROPERTY: header-args :eval never-export= |

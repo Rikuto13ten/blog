@@ -1,3 +1,4 @@
+
 :root {
     --bg-color: #232946;
     --paragraph: #b8c1ec;
@@ -6,7 +7,7 @@
     --button: #eebbc3;
 }
 
-h1,h2,h3 {
+h1,h2,h3,h4,h5 {
     color: var(--headline);
 }
 
@@ -35,6 +36,11 @@ a {
   text-decoration: none;
 }
 
+p {
+    line-height: 1.6rem;
+    margin: 20px 0;
+}
+
 nav > ul {
     display: flex;
     padding: 0;
@@ -54,6 +60,13 @@ nav > ul {
         padding: 0;
         margin: 0;
     }
+}
+
+:not(.content-container) > h2 {
+    display: inline-block;
+    border-bottom: 2px solid var(--button);
+    padding-right: 4px;
+    padding-bottom: 4px;
 }
 
 .tag-container {
@@ -76,12 +89,12 @@ nav > ul {
     }
 }
 
-p > code {
+:not(pre) > code {
     font-size: 0.8rem;
     color: var(--paragraph);
-    background-color: var(--stroke);
-    border-radius: 4px;
-    padding: 4px 4px;
+    background-color: var(--stroke) !important;
+    border-radius: 4px ;
+    padding: 2px 4px;
 }
 
 .codeblock--container {
@@ -97,7 +110,8 @@ p > code {
         border-radius: 8px 8px 0 0;
     }
     .codeblock--content {
-            background-color: #232136;
+        background-color: #232136;
+        overflow-x: auto;
         padding: 16px;
         border: solid 1px var(--paragraph);
         border-radius: 8px;

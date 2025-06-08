@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       9E1F87C5-6BF2-414A-AA6D-95F943486730
+:END:
+#+TITLE: emacs における window 管理
+
+window の管理がつらいので、方法をまとめる
+[[https://arc.net/l/quote/oykfibej][参考1]]
+

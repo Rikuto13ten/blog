@@ -1,6 +1,6 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://rikuto13ten.github.io'
 languageCode = 'ja-jp'
-title = 'りくとのブログ'
+title = 'りくと-備忘録'
 theme = "my-blog-theme"
 # hugo.toml
 ignoreFiles = ["themes/.*/content/.*"]
@@ -16,7 +16,6 @@ ignoreFiles = ["themes/.*/content/.*"]
   [markup.highlight]
     noClasses = false
     codeFences = true
-    lineNos = true
     style = 'rose-pine-moon'
 
 [caches]

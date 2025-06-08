@@ -1,0 +1,196 @@
+:PROPERTIES:
+:ID:       DE61DCC7-9E12-4958-9FC2-56F9DF8994B2
+:END:
+#+TITLE: Hugo & ox-hugo & github-pages で、org-mode で投稿するブログを作る
+#+AUTHOR: Rikuto13ten
+#+DATE: <2025-06-08>
+#+HUGO_BASE_DIR: ../../
+#+HUGO_DRAFT: false
+#+HUGO_TAGS: Hugo org-mode ox-hugo
+#+STARTUP: showall
+
+このブログサイトを作るにあたってやったことを備忘録的に書いていきます。
+
+* 技術選定
+要件は以下
+- org-mode で書いたものを ~.md~ なりに変換してくれる
+- ある程度カスタマイズができる(見ため等)
+
+** 静的サイトジェネレーター
+候補にあがったのは、 *one.el* と *Hugo* です。
+結論から言うと、 *Hugo* にしました。
+
+*** one.el
+URL : [[https://one.tonyaldon.com/]]
+公式の説明(翻訳)によると、
+#+begin_quote
+- 固有のorgファイルに含まれる、
+- たった1つのEmacsコマンドでレンダリングされ、
+- Emacs Lispコード（CSSも）を書いて変更できるもの
+- プレーンなEmacs Lispデータである「HTMLテンプレート」を使用して、
+- 設定ファイルなしで、
+- 外部の静的サイトジェネレータに依存しないのですか?
+
+one.el. [[https://one.tonyaldon.com/]] (参照 2025-06-07)
+#+end_quote
+とのこと。
+
+なかなか魅力的ですね。
+org-mode -> HTML に直接変換するようです。
+設定が Emacs-Lisp で書けるのは便利ですね。
+
+しかし、単一の org ファイルに書くようです。
+私は、現在は org-roam で 1ファイルごとに記事を書いていく方針なのでそこだけ合わなかったです。
+
+いつかどこかで試してみたいと思います。
+
+*** Hugo
+URL : [[https://gohugo.io/]]
+Hugo は、 Go で書かれた静的サイトジェネレーターです。
+
+実際に、 Hugo を使って org-mode で記事を書いている方も大勢おり、
+*ox-hugo* という org-mode を hugo の形式に合わせた markdown に変換してくれる Emacs のパッケージもあるくらいです。
+theme も自分でカスタマイズできるということもあり、こちらを使うことに決めました。
+
+* 環境構築
+
+環境構築は、 nix-flake で行ないました。
+以下のように、書いて ~nix develop~ するだけです。
+Nix Flake を導入してから環境構築が本当に楽になりました。
+#+begin_src nix
+{
+  description = "Hugo development environment";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            hugo
+          ];
+
+          shellHook = ''
+            echo "Hugo development environment loaded!"
+            echo "Hugo version: $(hugo version)"
+          '';
+        };
+      }
+    );
+}
+#+end_src
+
+環境構築が成功すると、以下のようにディレクトリが作られているかと思います。
+.
+├─ archetypes
+├─ assets
+├─ content
+├─ data
+├─ i18n
+├─ layouts
+├─ public
+├─ static
+├─ hugo.toml
+├─ flake.nix
+├─ flake.lock
+└─ README.md
+
+*ox-hugo* の導入は、
+~package.el~ なりに、以下のように書きます。
+#+begin_src emacs-lisp
+  (use-package ox-hugo
+    :ensure t
+    :pin melpa
+    :after ox
+    :config
+    (setq org-hugo-preserve-filling t)
+    (setq org-export-preserve-breaks t))
+#+end_src
+
+* theme の作成
+まず始めに、 theme を作るところから行いました。
+既存のテーマも良かったのですが、自分の満足いく見ためにしたかったので作ることにしました。
+以下のコマンドで、新しいテーマを作成します。
+#+begin_src shell
+hugo new theme [name]
+#+end_src
+実行が終わると、~theme/[name]~ に以下の構成でできているかと思います。
+.
+├─ archetypes
+├─ assets
+├─ content
+├─ data
+├─ i18n
+├─ layouts
+├─ public
+├─ static
+└─ hugo.toml
+
+見た目を変更するには、主に ~assets/css/main.css~ に css で修飾していきます。
+
+** コードブロックのシンタックスハイライトを変える
+[[https://gohugo.io/quick-reference/syntax-highlighting-styles/]] からシンタックスハイライトを選びます。
+例えば、 ~rose-pine-moon~ にするとします。
+以下のように、theme 内に ~rose-pine-moon~ の css を入れます。
+#+begin_src shell
+  hugo gen chromastyles --style=rose-pine-moon > ./theme/my-theme/static/css/syntax.css
+#+end_src
+
+その後、 ~./theme/my-theme/layouts/_partials/head.html~ に以下を追記します。
+#+begin_src css
+  <link rel="stylesheet" href="{{ .Site.BaseURL }}css/syntax.css" />
+#+end_src
+
+* org ファイルを markdown に変換する
+テーマがカスタマイズできたら、org ファイルをつくって記事にしていきます。
+プロジェクトルートに ~org/~ などのディレクトリを作成し、そのなかに org ファイルを作成します。
+org ファイルの先頭には Hugo 用のオプションを書く必要があります。
+#+begin_src org
+  #+TITLE: Hugo & ox-hugo & github-pages で、org-mode で投稿するブログを作る
+  #+AUTHOR: Rikuto13ten
+  #+DATE: <2025-06-08>
+  #+HUGO_BASE_DIR: ../../
+  #+HUGO_DRAFT: false
+  #+HUGO_TAGS: Hugo org-mode ox-hugo
+  #+STARTUP: showall
+#+end_src
+~#+HUGO_BASE_DIR~ は、 org ファイルからみて  ~./content/~ がどこにあるのかを書くものです。
+例えば、私の場合は ~./org/permanent/~ の中に記事を書いているので、org ファイルからのパスは ~../../~ となります。
+
+~#+HUGO_TAGS~ は、単純に記事のタグです。Zenn や、Qiita と同じです。
+
+ファイルを markdonw に出力するには、 ~C-c C-e H H~ というキーバインドを打ちます。
+↓他のコマンドを割り当てている方用に
+
+実行すると、 ~./content/posts/~ の中に md ファイルが作成されていると思います。
+
+* GitHub Pages でサイトを公開する
+サイトの設定が済んだので、公開したいと思います。
+プロジェクトを GitHub に公開リポジトリとして登録します。
+ドキュメントに方法がのっているので、参考にします。
+特につまずくこともなくできました。
+[[https://gohugo.io/host-and-deploy/host-on-github-pages/]]
+
+* つまったところ
+- *org-mode の改行が markdown に反映されない*
+  以下のように、設定することで改行が反映されます。
+  #+begin_src elisp
+   ;; エクスポート時にすべての改行が保持される
+    (setq org-export-preserve-breaks t)
+  #+end_src
+
+- *インラインコード -> ~これ~ に css が適用されない*
+  以下のようにすることで適用されます。
+  #+begin_src css
+    :not(pre) > code {}
+  #+end_src
+
+
+

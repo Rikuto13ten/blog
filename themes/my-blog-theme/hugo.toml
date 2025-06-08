@@ -32,5 +32,4 @@ title = 'My New Hugo Site'
   [markup.highlight]
     noClasses = false
     codeFences = true
-    lineNos = true
     style = 'rose-pine-moon'

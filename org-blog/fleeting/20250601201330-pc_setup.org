@@ -2,6 +2,7 @@
 :ID:       AA95DC1B-DE23-4CCD-9710-5A12A68F0937
 :END:
 #+TITLE: pc-setup
+
 * PC を初期化してやること
 - flake.nix で、環境構築
   git から持ってきたら以下実行
