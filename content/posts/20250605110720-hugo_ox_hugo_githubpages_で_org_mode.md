@@ -134,7 +134,7 @@ Nix Flake を導入してから環境構築が本当に楽になりました。 
 hugo new theme [name]
 ```
 
-実行が終わると、~theme/[name]~ に以下の構成でできているかと思います。 <br/>
+実行が終わると、 `theme/[name]` に以下の構成でできているかと思います。 <br/>
 . <br/>
 ├─ archetypes <br/>
 ├─ assets <br/>

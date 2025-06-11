@@ -7,4 +7,10 @@
 
 ブログを作ってみたくて作りました。
 技術的なこと中心に色々投稿しようかなと思います。
+#+begin_src elisp
+  (setq my-info '((name . "Rikuto13ten")
+                  (age . 25)
+                  (editor . "Emacs")))
+#+end_src
+s
 

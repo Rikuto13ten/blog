@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       7646DBD9-6F6A-4318-9AA6-AE4E5C4B0F7D
+:END:
+#+TITLE: lisp における ~'~
+
+例えば、変数名をメッセージとして出す処理があるとする。
+#+begin_src elisp
+  (setq name "rikuto")
+  (defun my-function (value)
+    (let ((value-name (symbol-name value)))
+      (message "変数名は、 %s" value-name)))
+#+end_src
+
+この関数を呼びだす時には
+
+これだと ~"rikuto"~ が渡される。つまり評価されて渡されてしまう。
+#+begin_src elisp
+  (my-function name)
+#+end_src
+
+なので、変数自体を渡したい場合は ~'~ をつけてシンボルにして渡す。
+#+begin_src elisp
+  (my-function 'name)
+#+end_src
+
+これは、特に elisp では使うもので以下のような例がある
+#+begin_src elisp
+  (global-set-key (kbd "C-s") '関数名)
+#+end_src
