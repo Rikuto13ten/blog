@@ -1,0 +1,57 @@
+:PROPERTIES:
+:ID:       4D51BA30-BDCF-436E-8546-A6426487A96B
+:END:
+#+TITLE: nix develop でプロジェクト内に LSP をインストールして Emacs に認識させる
+
+* 最小構成
+#+begin_src elisp
+  ;; init.elに追加（これだけ！）
+  (use-package envrc
+    :ensure t
+    :config
+    (envrc-global-mode))
+
+  ;; Eglot設定（基本設定のみ）
+  (use-package eglot
+    :ensure t
+    :hook (elm-mode . eglot-ensure))
+#+end_src
+
+
+* プロジェクトの flake.nix
+#+begin_src nix
+  {
+    description = "Elm development environment";
+
+    inputs = {
+      nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+      flake-utils.url = "github:numtide/flake-utils";
+    };
+
+    outputs = { nixpkgs, flake-utils, ... }:
+      flake-utils.lib.eachDefaultSystem (system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+          {
+            devShells.default = pkgs.mkShell {
+              buildInputs = with pkgs; [
+                elm
+                elm-format
+                elm-test
+                elmPackages.elm-language-server
+              ];
+
+              # 環境変数でパスを明示的に設定
+              shellHook = ''
+              export ELM_LANGUAGE_SERVER=${pkgs.elmPackages.elm-language-server}/bin/elm-language-server
+              echo "elm-language-server available at: $ELM_LANGUAGE_SERVER"
+
+              echo "use flake" > .envrc
+              direnv allow
+            '';
+            };
+          });
+  }
+#+end_src
+
