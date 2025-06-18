@@ -1,0 +1,116 @@
+:PROPERTIES:
+:ID:       68CFE507-EDB1-4A74-9899-AEFF12870A01
+:END:
+#+TITLE: Intellij IDE 関連の設定
+
+* AquaSKK
+AquaSKK の環境設定の *互換性* から該当の IDE の項目すべてにチェックをいれる。
+AquaSKK の かな カナ ASCII がそれぞれないと入力できない。
+
+* ideaVim
+Gist から設定をコピペ
+#+begin_src json
+" insert mode をメインとする
+set whichwrap=b,s,h,l,<,>,[,]
+
+" C-g に Esc を割り当てる
+" その後 Insert mode へ
+inoremap <C-g> <Esc>li
+nnoremap <C-g> <Esc>i
+vnoremap <C-g> <Esc>
+inoremap <C-j> <Esc>i
+
+" Karabiner Element で
+" C-g に Esc を割り当ててる場合
+inoremap <Esc> <Esc>li
+nnoremap <Esc> <Esc>i
+vnoremap <Esc> <Esc>
+
+" 範囲選択
+inoremap <C-z> <C-o>v
+vnoremap <C-w> <BS>i
+
+" 基本的な移動
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
+inoremap <C-n> <Down>
+inoremap <C-p> <Up>
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
+inoremap <C-m> <Enter>
+
+"visual mode 基本的な移動
+vnoremap <C-f> <Right>
+vnoremap <C-b> <Left>
+vnoremap <C-n> <Down>
+vnoremap <C-p> <Up>
+vnoremap <C-a> <Home>
+vnoremap <C-e> <End>
+vnoremap <C-m> <Enter>
+
+" 削除系
+inoremap <C-d> <Del>
+inoremap <C-h> <BS>
+inoremap <C-k> <C-o>dd
+inoremap <A-d> <C-o>ciw
+vnoremap <C-d> <Del>
+
+" 単語移動
+inoremap <A-f> <C-o>w
+inoremap <A-b> <C-o>b
+vnoremap <A-f> <C-o>w
+vnoremap <A-b> <C-o>b
+
+" ファイル操作（IntelliJ のアクション呼び出し）
+inoremap <C-x><C-f> :action GotoFile<CR>
+inoremap <C-x><C-s> :action SaveDocument<CR>
+inoremap <C-x><C-c> :action Exit
+
+" アンドゥ・リドゥ
+inoremap <C-x>u <C-o>u
+
+" コピー・ペースト
+inoremap <A-w> :action EditorCopy<CR>
+inoremap <C-y> :action EditorPaste<CR>
+inoremap <C-w> <C-o>x
+vnoremap <A-w> <C-o>y
+vnoremap <C-y> <C-o>p
+vnoremap <C-w> <C-o>x
+
+" コマンド実行
+inoremap <A-x> :action SearchEverywhere<CR>
+inoremap <A-s> :action :action <CR>
+
+" 大文字 小文字
+inoremap <A-l> <C-o>vU
+inoremap <A-u> <C-o>vu
+
+" スクロール
+inoremap <A-v> :action EditorScrollUp<CR>
+inoremap <C-v> :action EditorScrollDown<CR>
+
+" 文字列検索
+inoremap <C-s> :action Find<CR>
+
+" 定義
+inoremap <C-c>ld :action GotoDeclaration<CR>
+" 使用
+inoremap <C-c>li :action FindUsages<CR>
+"コードアクション
+inoremap <C-c>la :action ShowIntentionActions<CR>
+" 戻る
+inoremap <C-c>lb :action Back<CR>
+#+end_src
+
+* Font
+Iosevka Custom Rikuto Code を設定
+
+* Color Scheme
+git にあげてあるやつ設定
+
+* Plugin
+- [ ] inline error
+- [ ] ideaVim
+
+* Settings
+

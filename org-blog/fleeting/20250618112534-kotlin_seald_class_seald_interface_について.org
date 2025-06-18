@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       FAB18E94-3736-43C5-8B90-F1A4235496D0
+:END:
+#+TITLE: Kotlin ~seald class~, ~seald interface~ について
+* 結論
+#+begin_src txt
+オブジェクトが複数の独立した特性を持つ？
+├─ Yes → sealed interface を検討
+│   └─ 例: Flyable + Swimmable, Clickable + Focusable
+└─ No → sealed class を検討
+    └─ 例: Success/Error/Loading, Different types of the same thing
+#+end_src
+
+* Seald Interface
+#+begin_src kotlin
+sealed interface MediaType
+sealed interface Downloadable
+sealed interface Streamable
+
+data class AuditoFile(val url: URL) : MediaType, Downloadable, Streamable
+data class VideoFile(val url: String) : MediaType, Downloadable, Streamable
+data class ImageFile(val url: String) : MediaType, Downloadable
+#+end_src
+
+** 使用例
+
