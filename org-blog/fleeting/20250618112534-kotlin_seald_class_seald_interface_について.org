@@ -12,7 +12,7 @@
 #+end_src
 
 * Seald Interface
-#+begin_src kotlin
+#+BEGIN_SRC kotlin
 sealed interface MediaType
 sealed interface Downloadable
 sealed interface Streamable
@@ -20,7 +20,7 @@ sealed interface Streamable
 data class AuditoFile(val url: URL) : MediaType, Downloadable, Streamable
 data class VideoFile(val url: String) : MediaType, Downloadable, Streamable
 data class ImageFile(val url: String) : MediaType, Downloadable
-#+end_src
+#+END_SRC
 
 ** 使用例
 

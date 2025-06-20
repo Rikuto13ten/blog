@@ -9,7 +9,7 @@ AquaSKK の かな カナ ASCII がそれぞれないと入力できない。
 
 * ideaVim
 Gist から設定をコピペ
-#+begin_src json
+#+begin_src
 " insert mode をメインとする
 set whichwrap=b,s,h,l,<,>,[,]
 
