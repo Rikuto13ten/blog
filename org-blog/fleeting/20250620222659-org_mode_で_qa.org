@@ -1,0 +1,16 @@
+:PROPERTIES:
+:ID:       655BBFC1-606C-4CC6-8CE9-5F83BF375160
+:END:
+#+TITLE: org-mode で QA 用の記法を作る
+
+*describe list* を使っている
+といっても色つけたぐらい
+
+記法
+#+begin_src org-mode
+  - Q :: 質問文
+  - A :: 回答文
+#+end_src
+
+- Q :: これが
+- A :: 記法
