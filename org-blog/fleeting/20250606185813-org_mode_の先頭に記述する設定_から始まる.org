@@ -41,8 +41,8 @@ https://tamura70.hatenadiary.org/entry/20100303/org
 |---------------+---------------------------------+----------------------------------------------------+----------------|
 | =#+ARCHIVE:=    | アーカイブファイルの場所を指定  | =#+ARCHIVE: %s_done::* Archived Tasks=               |                |
 | =#+TODO:=       | TODO キーワードシーケンスの定義 | =#+TODO: TODO WAIT                                 | DONE CANCELED= |
-| =#+SEQ_TODO:=   | シーケンシャルなTODOキーワード  | =#+SEQ_TODO: TODO NEXT                             | DONE=          |
-| =#+TYP_TODO:=   | タイプ別TODOキーワード          | =#+TYP_TODO: Fred Sara Lucy Mike                   | DONE=          |
+| =#+SEQ_TODO:=   | シーケンシャルなTODOキーワード  | =#+SEQ_TODO: TODO NEXT                              | DONE=          |
+| =#+TYP_TODO:=   | タイプ別TODOキーワード          | =#+TYP_TODO: Fred Sara Lucy Mike                    | DONE=          |
 | =#+TAGS:=       | タグの定義                      | =#+TAGS: @work @home @computer { @urgent @someday }= |                |
 | =#+PRIORITIES:= | 優先度の設定                    | =#+PRIORITIES: A C B=                                |                |
 ** その他の設定
