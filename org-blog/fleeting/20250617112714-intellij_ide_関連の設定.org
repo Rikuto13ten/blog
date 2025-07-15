@@ -10,7 +10,7 @@ AquaSKK の かな カナ ASCII がそれぞれないと入力できない。
 * ideaVim
 Gist から設定をコピペ
 #+begin_src
-" insert mode をメインとする
+  " insert mode をメインとする
 set whichwrap=b,s,h,l,<,>,[,]
 
 " C-g に Esc を割り当てる
@@ -26,6 +26,8 @@ inoremap <Esc> <Esc>li
 nnoremap <Esc> <Esc>i
 vnoremap <Esc> <Esc>
 
+inoremap <C-j> <Nop>
+
 " 範囲選択
 inoremap <C-z> <C-o>v
 vnoremap <C-w> <BS>i
@@ -35,7 +37,7 @@ inoremap <C-f> <Right>
 inoremap <C-b> <Left>
 inoremap <C-n> <Down>
 inoremap <C-p> <Up>
-inoremap <C-a> <Home>
+inoremap <C-a> <C-o>^
 inoremap <C-e> <End>
 
 "visual mode 基本的な移動
@@ -56,9 +58,9 @@ inoremap <A-d> <C-o>ciw
 vnoremap <C-d> <Del>
 
 " 単語移動
-inoremap <A-f> <C-o>w
+inoremap <A-f> <C-o>e
 inoremap <A-b> <C-o>b
-vnoremap <A-f> <C-o>w
+vnoremap <A-f> <C-o>e
 vnoremap <A-b> <C-o>b
 
 " ファイル操作（IntelliJ のアクション呼び出し）
@@ -67,7 +69,7 @@ inoremap <C-x><C-s> :action SaveDocument<CR>
 inoremap <C-x><C-c> :action Exit
 
 " アンドゥ・リドゥ
-inoremap <C-x>u <C-o>u
+inoremap <C-u> <C-o>u
 
 " コピー・ペースト
 inoremap <A-w> :action EditorCopy<CR>
@@ -107,9 +109,8 @@ nnoremap ga :action ShowIntentionActions<CR>i
 nnoremap gf :action Forward<CR>i
 " 戻る
 nnoremap gb :action Back<CR>i
-
-nnoremap ] :action NextTab<CR>
-nnoremap [ :action PreviousTab<CR>
+" Rename
+nnoremap gr :action RenameElement<CR>i
 #+end_src
 * Font
 Iosevka Custom Rikuto Code を設定
