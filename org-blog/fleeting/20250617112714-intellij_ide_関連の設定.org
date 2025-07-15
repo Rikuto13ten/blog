@@ -9,7 +9,7 @@ AquaSKK の かな カナ ASCII がそれぞれないと入力できない。
 
 * ideaVim
 Gist から設定をコピペ
-#+begin_src 
+#+begin_src
 " insert mode をメインとする
 set whichwrap=b,s,h,l,<,>,[,]
 
@@ -37,7 +37,6 @@ inoremap <C-n> <Down>
 inoremap <C-p> <Up>
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
-inoremap <C-m> <Enter>
 
 "visual mode 基本的な移動
 vnoremap <C-f> <Right>
@@ -47,6 +46,7 @@ vnoremap <C-p> <Up>
 vnoremap <C-a> <Home>
 vnoremap <C-e> <End>
 vnoremap <C-m> <Enter>
+vnoremap <C-h> <BS>
 
 " 削除系
 inoremap <C-d> <Del>
@@ -89,19 +89,28 @@ inoremap <A-u> <C-o>vu
 inoremap <A-v> :action EditorScrollUp<CR>
 inoremap <C-v> :action EditorScrollDown<CR>
 
+inoremap <C-i> <C-o>==
+vnoremap <C-i> <C-o>==
+
 " 文字列検索
 inoremap <C-s> :action Find<CR>
 
+" C-c で normal mode に入る
+inoremap <C-c> <Esc>
 " 定義
-inoremap <C-c>ld :action GotoDeclaration<CR>
-" 使用
-inoremap <C-c>li :action FindUsages<CR>
+nnoremap gd :action GotoDeclaration<CR>i
+" 使用箇所の検索
+nnoremap gi :action FindUsages<CR>i
 "コードアクション
-inoremap <C-c>la :action ShowIntentionActions<CR>
+nnoremap ga :action ShowIntentionActions<CR>i
+" 進む
+nnoremap gf :action Forward<CR>i
 " 戻る
-inoremap <C-c>lb :action Back<CR>
-#+end_src
+nnoremap gb :action Back<CR>i
 
+nnoremap ] :action NextTab<CR>
+nnoremap [ :action PreviousTab<CR>
+#+end_src
 * Font
 Iosevka Custom Rikuto Code を設定
 
