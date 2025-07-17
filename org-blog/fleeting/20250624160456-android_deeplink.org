@@ -1,0 +1,73 @@
+:PROPERTIES:
+:ID:       93E214AB-4DEC-45A3-AFEE-8529DF2A35C7
+:END:
+#+TITLE: Android Deeplink
+
+* 目標
+
+- ~https://summit.store.news.jp~ で本番アプリに
+- ~https://summit-test.storenews.jp~ で検証に飛ぶようにしたい
+
+** gradle に書く
+
+   - ~android { productFlavors {} }~ で、それぞれに対して変数をセットすることができる。
+   - 本番と検証でそれぞれの ~applicationId~ が必要なのでセットする。
+     通常、本番の id は ~android { defaultConfig{} }~ に書かれていることが多い。
+   
+#+begin_src gradle
+  productFlavors {
+        production {
+            manifestPlaceholders = [
+                    deeplink_host: "summit.storenews.jp"
+            ]
+
+        }
+        develop {
+            applicationId "jp.co.summitstore.android.app.dev"
+            manifestPlaceholders = [
+                    deeplink_host: "summit-test.storenews.jp"
+            ]
+        }
+    }
+#+end_src
+
+** Manifest ファイルにディープリンクとして設定する
+
+   URLがタップされた時に、Activityが起動してディープリンク処理を行う設定。
+   下記の設定をすることで、ディープリンクが踏まれたときに、任意の Activity で処理をすることができる。
+   
+  #+begin_src xml
+    <activity
+        android:name="jp.co.katta.linkage.LinkageDeeplinkActivity"
+        android:launchMode="singleTask"
+        android:theme="@style/AppTheme.NoActionBar"
+        android:exported="true">
+      <intent-filter android:autoVerify="true">
+        <action android:name="android.intent.action.VIEW" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <data android:scheme="https" />
+        <data android:host="${deeplink_host}" />
+      </intent-filter>
+    </activity>
+  #+end_src
+
+
+** サーバーに置く、 ~applink.json~ ファイルを作る
+   本番、検証それぞれで以下の手順を行う。
+   AndroidStudio で *App link assistant* を開いて、 「Open Digital Asset Links File Generator」を押す。
+   
+   | Site domain    | ディープリンクの URL                 |
+   | Application ID | productFlavor に書いた applicationID |
+
+   「Signing config」にチェックを入れる
+   debug か Release かはそのときによると思うが、
+   基本配布するのは Release のため Release にする。
+
+   「Generate Digital Asset Link File」を押すと json が出るのでコピペ
+   ファイル名の指定もでるはずなのでそれにしたがう
+
+
+

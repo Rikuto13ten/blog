@@ -10,107 +10,152 @@ AquaSKK の かな カナ ASCII がそれぞれないと入力できない。
 * ideaVim
 Gist から設定をコピペ
 #+begin_src
-  " insert mode をメインとする
+" ====================================
+" 基本設定
+" ====================================
+" insert mode をメインとする
 set whichwrap=b,s,h,l,<,>,[,]
 
-" C-g に Esc を割り当てる
-" その後 Insert mode へ
-inoremap <C-g> <Esc>li
-nnoremap <C-g> <Esc>i
-vnoremap <C-g> <Esc>
-inoremap <C-j> <Esc>i
+" ====================================
+" モード切り替え
+" ====================================
+" C-g: Escを送信してInsert modeに戻る
+imap <C-g> <Esc>li
+map <C-g> <Esc>i
+vmap <C-g> <Esc>
 
-" Karabiner Element で
-" C-g に Esc を割り当ててる場合
-inoremap <Esc> <Esc>li
-nnoremap <Esc> <Esc>i
-vnoremap <Esc> <Esc>
+" なんらかのソフトで C-g に Esc を割り当てている場合
+imap <Esc> <Esc>i<C-o>l
+map <Esc> <Esc>i
+vmap <Esc> <Esc>
 
-inoremap <C-j> <Nop>
+" C-j: insert modeで無効化. AquaSkk 用
+imap <C-j> <Nop>
 
-" 範囲選択
-inoremap <C-z> <C-o>v
-vnoremap <C-w> <BS>i
+" C-c: Normal modeに入る
+imap <C-c> <Esc>
 
-" 基本的な移動
-inoremap <C-f> <Right>
-inoremap <C-b> <Left>
-inoremap <C-n> <Down>
-inoremap <C-p> <Up>
-inoremap <C-a> <C-o>^
-inoremap <C-e> <End>
-
-"visual mode 基本的な移動
-vnoremap <C-f> <Right>
-vnoremap <C-b> <Left>
-vnoremap <C-n> <Down>
-vnoremap <C-p> <Up>
-vnoremap <C-a> <Home>
-vnoremap <C-e> <End>
-vnoremap <C-m> <Enter>
-vnoremap <C-h> <BS>
-
-" 削除系
-inoremap <C-d> <Del>
-inoremap <C-h> <BS>
-inoremap <C-k> <C-o>dd
-inoremap <A-d> <C-o>ciw
-vnoremap <C-d> <Del>
-
+" ====================================
+" カーソル移動
+" ====================================
+" Insert mode での移動
+imap <C-f> <Right>
+imap <C-b> <Left>
+imap <C-n> <Down>
+imap <C-p> <Up>
+imap <C-a> <Home>
+imap <C-e> <End>
 " 単語移動
-inoremap <A-f> <C-o>e
-inoremap <A-b> <C-o>b
-vnoremap <A-f> <C-o>e
-vnoremap <A-b> <C-o>b
+imap <A-f> <C-o>e
+imap <A-b> <C-o>b
 
-" ファイル操作（IntelliJ のアクション呼び出し）
-inoremap <C-x><C-f> :action GotoFile<CR>
-inoremap <C-x><C-s> :action SaveDocument<CR>
-inoremap <C-x><C-c> :action Exit
+" Visual mode での移動
+vmap <C-f> <Right>
+vmap <C-b> <Left>
+vmap <C-n> <Down>
+vmap <C-p> <Up>
+vmap <C-a> <Home>
+vmap <C-e> <End>
+" 単語移動
+vmap <A-f> <C-o>e
+vmap <A-b> <C-o>b
 
-" アンドゥ・リドゥ
-inoremap <C-u> <C-o>u
+" ====================================
+" Enter
+" ====================================
+imap <C-m> <Enter>
+vmap <C-m> <Enter>
 
+" ====================================
+" 範囲選択
+" ====================================
+" Insert mode から Visual mode へ
+imap <C-z> <C-o>v
+
+" ====================================
+" 削除系
+" ====================================
+" Insert mode での削除
+imap <C-d> <Del>
+imap <C-h> <BS>
+imap <C-k> <Action>(EditorSelectLine)<Action>(EditorCut)
+imap <A-d> <Action>(EditorSelectWord)<Action>(EditorCut)
+imap <C-w> <C-o>x
+
+" Visual mode での削除
+vmap <C-w> <Action>(EditorCut)
+vmap <C-d> <Action>(EditorCut)
+vmap <C-h> <Action>(EditorCut)
+
+" ====================================
 " コピー・ペースト
-inoremap <A-w> :action EditorCopy<CR>
-inoremap <C-y> :action EditorPaste<CR>
-inoremap <C-w> <C-o>x
-vnoremap <A-w> <C-o>y
-vnoremap <C-y> <C-o>p
-vnoremap <C-w> <C-o>x
+" ====================================
+" Insert mode でのコピー・ペースト
+imap <A-w> <Action>(EditorCopy)
+imap <C-y> <Action>(EditorPaste)
 
-" コマンド実行
-inoremap <A-x> :action SearchEverywhere<CR>
-inoremap <A-s> :action :action <CR>
+" Visual mode でのコピー・ペースト
+vmap <A-w> <C-o>y
+vmap <C-y> <C-o>p
+vmap <C-w> <C-o>x
 
-" 大文字 小文字
-inoremap <A-l> <C-o>vU
-inoremap <A-u> <C-o>vu
+" ====================================
+" アンドゥ・リドゥ
+" ====================================
+" Insert mode でのアンドゥ
+imap <C-u> <C-o>u
 
+" ====================================
+" 大文字小文字変換
+" ====================================
+" Visual mode での大文字小文字変換
+vmap <A-l>U
+vmap <A-u>u
+
+" ====================================
 " スクロール
-inoremap <A-v> :action EditorScrollUp<CR>
-inoremap <C-v> :action EditorScrollDown<CR>
+" ====================================
+" Insert mode でのスクロール
+imap <A-v> <Action>(EditorScrollUp)
+imap <C-v> <Action>(EditorScrollDown)
 
-inoremap <C-i> <C-o>==
-vnoremap <C-i> <C-o>==
+" ====================================
+" インデント
+" ====================================
+" Insert mode でのインデント
+imap <C-i> <C-o>==
 
+" Visual mode でのインデント
+vmap <C-i> <C-o>==
+
+" ====================================
 " 文字列検索
-inoremap <C-s> :action Find<CR>
+" ====================================
+" Insert mode での検索
+imap <C-s> <Action>(Find)
 
-" C-c で normal mode に入る
-inoremap <C-c> <Esc>
-" 定義
-nnoremap gd :action GotoDeclaration<CR>i
-" 使用箇所の検索
-nnoremap gi :action FindUsages<CR>i
-"コードアクション
-nnoremap ga :action ShowIntentionActions<CR>i
-" 進む
-nnoremap gf :action Forward<CR>i
-" 戻る
-nnoremap gb :action Back<CR>i
-" Rename
-nnoremap gr :action RenameElement<CR>i
+" ====================================
+" ファイル操作
+" ====================================
+" Insert mode でのファイル操作
+imap <C-x><C-f> <Action>(GotoFile)
+imap <C-x><C-s> <Action>(SaveDocument)
+
+" ====================================
+" コマンド実行
+" ====================================
+" Insert mode でのコマンド実行
+imap <A-x> <Action>(SearchEverywhere)
+
+" ====================================
+" 定義・ナビゲーション
+" ====================================
+map gd <Action>(GotoDeclaration)i " 定義へ移動
+map gi <Action>(FindUsages)i " 使用箇所の検索
+map ga <Action>(ShowIntentionActions)i " コードアクション
+map gf <Action>(Forward)i " 進む
+map gb <Action>(Back)i " 戻る
+map gr <Action>(RenameElement)i " リネーム
 #+end_src
 * Font
 Iosevka Custom Rikuto Code を設定

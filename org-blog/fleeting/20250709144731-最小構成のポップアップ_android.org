@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:       003B8169-8698-4D30-9E86-48B9EF833B96
+:END:
+#+TITLE: 最小構成のポップアップ Android
+#+name: layout
+#+begin_src xml
+  <?xml version="1.0" encoding="utf-8"?>
+      <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           xmlns:android="http://schemas.android.com/apk/res/android"
+           android:orientation="vertical">
+
+      <ImageView
+           android:contentDescription="@string/about_title"
+           android:src="@drawable/summit_barcode_image"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"/>
+
+      <ImageButton
+           android:contentDescription="@string/about_title"
+           android:src="@drawable/done_button"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"/>
+      </LinearLayout>
+#+end_src
+
+#+name: 呼び出し側
+#+begin_src java
+  View popupView = getLayoutInflater().inflate(R.layout.fragment_tomos_modal_from_deeplink, null);
+  AlertDialog dialog = new AlertDialog.Builder(this)
+      .setView(popupView)
+      .create();
+  dialog.show();
+#+end_src
