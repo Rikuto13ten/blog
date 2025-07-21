@@ -1,0 +1,194 @@
+:PROPERTIES:
+:ID:       948E9308-00DE-4D92-A23B-ABE075B61BE9
+:END:
+#+TITLE: git を自動同期
+#+begin_src shell
+  #!/bin/bash
+  # =============================================
+  # Git Auto Sync - expect統合版
+  # =============================================
+
+  # 設定
+  REPOS=(
+      "$HOME/.emacs.d"
+      "$HOME/blog"
+      # 追加したいリポジトリのパスをここに記載
+  )
+
+  # =============================================
+  # expect自動化関数
+  # =============================================
+
+  setup_git_and_ssh() {
+      echo "🔧 Setting up Git & SSH..."
+
+      # expectの存在確認
+      if ! command -v expect >/dev/null 2>&1; then
+          echo "⚠️  expect not found. Install: brew install expect (macOS) or sudo apt install expect (Linux)"
+          echo "🔑 Manual SSH key setup..."
+          eval "$(ssh-agent -s)" >/dev/null
+          ssh-add ~/.ssh/id_ed25519 2>/dev/null || echo "Enter SSH passphrase manually"
+          return 1
+      fi
+
+      # expect自動化実行
+      expect << 'EOF' >/dev/null 2>&1
+  set timeout 30
+
+  # SSH Agent開始
+  spawn bash -c {eval "$(ssh-agent -s)"}
+  expect eof
+
+  # SSH key追加（パスフレーズ自動入力）
+  spawn ssh-add ~/.ssh/id_ed25519
+  expect {
+      "Enter passphrase" {
+          send "Rikuto13\r"
+          expect eof
+      }
+      "Identity added" { }
+      eof
+  }
+
+  # SSH接続テスト（パスワード自動入力）
+  spawn ssh -T rikuto
+  expect {
+      "password:" {
+          send "Rikuto13\r"
+          expect eof
+      }
+      "yes/no" {
+          send "yes\r"
+          expect {
+              "password:" {
+                  send "Rikuto13\r"
+                  expect eof
+              }
+              eof
+          }
+      }
+      "successfully authenticated" { }
+      timeout { }
+      eof
+  }
+  EOF
+
+      echo "✅ SSH setup completed"
+  }
+
+  setup_local_git_config() {
+      local repo="$1"
+
+      # expectでローカルGit設定
+      expect << EOF >/dev/null 2>&1
+  set timeout 10
+
+  spawn git config --local user.name "rikuto1367@gmail.com"
+  expect eof
+
+  spawn git config --local user.email "Rikuto13ten"
+  expect eof
+  EOF
+
+      echo "   📝 Git config set"
+  }
+
+  # =============================================
+  # 初期設定
+  # =============================================
+
+  # グローバルGit設定（フォールバック用）
+  if [ -z "$(git config --global user.name)" ]; then
+      git config --global user.name "rikuto1367@gmail.com"
+      git config --global user.email "Rikuto13ten"
+  fi
+
+  # SSH自動設定
+  setup_git_and_ssh
+
+  # =============================================
+  # 同期処理
+  # =============================================
+
+  echo "🚀 Starting sync at $(date '+%H:%M:%S')"
+
+  for repo in "${REPOS[@]}"; do
+      # リポジトリ存在チェック
+      if [ ! -d "$repo" ]; then
+          echo "⚠️  $repo (not found)"
+          continue
+      fi
+
+      echo "🔄 $repo"
+      cd "$repo" || continue
+
+      # Gitリポジトリチェック
+      if ! git rev-parse --git-dir >/dev/null 2>&1; then
+          echo "   ⚠️  Not a git repository"
+          continue
+      fi
+
+      # ローカルGit設定
+      setup_local_git_config "$repo"
+
+      # HTTPSからSSHに変更（必要時）
+      remote_url=$(git remote get-url origin 2>/dev/null)
+      if [[ "$remote_url" == https://github.com/* ]]; then
+          ssh_url=$(echo "$remote_url" | sed 's#https://github.com/#git@github.com:#')
+          git remote set-url origin "$ssh_url"
+          echo "   🔗 Converted to SSH"
+      fi
+
+      # ローカル変更をstash
+      stashed=0
+      if [ -n "$(git status --porcelain)" ]; then
+          git stash push -m "auto-$(date '+%H%M%S')" >/dev/null 2>&1
+          stashed=1
+          echo "   📦 Stashed changes"
+      fi
+
+      # Pull（main優先、次にmaster）
+      echo "   🔄 Fetching..."
+      git fetch origin >/dev/null 2>&1
+
+      if git pull --rebase origin main >/dev/null 2>&1; then
+          echo "   ⬇️  Pulled (main)"
+          current_branch="main"
+      elif git pull --rebase origin master >/dev/null 2>&1; then
+          echo "   ⬇️  Pulled (master)"
+          current_branch="master"
+      else
+          echo "   ❌ Pull failed"
+          [ "$stashed" = "1" ] && git stash pop >/dev/null 2>&1
+          continue
+      fi
+
+      # Stash復元
+      if [ "$stashed" = "1" ]; then
+          git stash pop >/dev/null 2>&1
+          echo "   📦 Restored changes"
+      fi
+
+      # Push（変更があれば）
+      if [ -n "$(git status --porcelain)" ]; then
+          echo "   📝 Committing..."
+          git add .
+          git commit -m "Auto-sync $(date '+%Y-%m-%d %H:%M:%S')" >/dev/null 2>&1
+
+          if git push origin "$current_branch" >/dev/null 2>&1; then
+              echo "   ⬆️  Pushed"
+          else
+              echo "   ❌ Push failed"
+          fi
+      fi
+
+      # 設定確認（初回のみ表示）
+      if [[ "$repo" == "${REPOS[0]}" ]]; then
+          echo "   ℹ️  Git config: $(git config user.name) <$(git config user.email)>"
+      fi
+
+      echo "   ✅ Done"
+  done
+
+  echo "🎉 Sync completed at $(date '+%H:%M:%S')"
+#+end_src
