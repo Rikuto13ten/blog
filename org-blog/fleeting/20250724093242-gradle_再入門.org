@@ -5,13 +5,13 @@
 オープンソースのビルド自動化ツール
 JVM 上で実行
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 *** 非推奨
+#+begin_src kotlin
+// bad
+apply plugin
 
-=======
-* 
->>>>>>> Stashed changes
-=======
-* 
->>>>>>> Stashed changes
+// good
+plugins {
+    id("com.jfrog.bintray") version "1.8.5"
+}
+#+end_src
