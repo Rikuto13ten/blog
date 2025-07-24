@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       6D8306F5-A721-4BDF-8AF1-4823EF704138
+:END:
+#+TITLE: Gradle 再入門
+オープンソースのビルド自動化ツール
+JVM 上で実行
+
