@@ -5,5 +5,9 @@
 オープンソースのビルド自動化ツール
 JVM 上で実行
 
+<<<<<<< Updated upstream
 *** 非推奨
 
+=======
+* 
+>>>>>>> Stashed changes
